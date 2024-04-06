@@ -75,11 +75,11 @@ Allow repeated keys to be shown in cmmnd. False as default.
 <Command repeatKeys/>
 ```
 
-#### dissapearAfter = number --> in ms
-Decide how much time cmmnd in shown after is triggered. 2 seconds as default
+#### disappearAfter = number --> in ms
+Decide how much time cmmnd is shown after is triggered. 2 seconds as default
 
 ```tsx
-<Command dissapearAfter={4000}/>
+<Command disappearAfter={4000}/>
 ```
 
 
