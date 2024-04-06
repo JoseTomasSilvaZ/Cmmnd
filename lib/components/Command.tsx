@@ -53,7 +53,9 @@ interface PressedKeyProps {
 }
 
 interface Props extends VariantProps<typeof styleVariants> {
-  commandTriggerKeys?: Array<string>;
+  triggerKeys?: Array<string>;
+  dissapearAfter?: number;
+  repeatKeys?: boolean;
 }
 
 function PressedKey({ pressedKey, variants, variant }: PressedKeyProps) {
@@ -83,46 +85,54 @@ function resetCommand(
 export default function Command(props: Props) {
   const [keysPressed, setKeysPressed] = useState<Array<string>>([]);
   const [showComponent, setShowComponent] = useState(false);
+    useEffect(() => {
+      const dissapearAfter =
+        typeof props.dissapearAfter === "number" && props.dissapearAfter > 0
+          ? props.dissapearAfter
+          : 2000;
+      let timer: NodeJS.Timeout;
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
+      const handleKeyPress = (event: KeyboardEvent) => {
+        const key = formatKey(event.key);
+        const triggers = props.triggerKeys || [];
+        setKeysPressed((prevKeys) => {
+          if (
+            !triggers.includes(key) &&
+            prevKeys.length === 0 &&
+            triggers.length > 0
+          )
+            return prevKeys;
+          setShowComponent(true);
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            resetCommand(setShowComponent, setKeysPressed);
+          }, dissapearAfter);
+          const keyAlreadyChained = prevKeys.includes(key);
 
-    const handleKeyPress = (event: KeyboardEvent) => {
-      const key = formatKey(event.key);
-      const triggers = props.commandTriggerKeys || [];
-      setKeysPressed((prevKeys) => {
-        if (
-          !triggers.includes(key) &&
-          prevKeys.length === 0 &&
-          triggers.length > 0
-        )
-          return prevKeys;
-        setShowComponent(true);
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          resetCommand(setShowComponent, setKeysPressed);
-        }, 2000);
-        const keyAlreadyChained = prevKeys.includes(key);
-
-        if (triggers.length > 0 && triggers.includes(key)) {
-          if (!keyAlreadyChained) {
-            return [...prevKeys, key];
+          if (triggers.length > 0 && triggers.includes(key)) {
+            if (!keyAlreadyChained || props.repeatKeys) {
+              return [...prevKeys, key];
+            } else {
+              return [key];
+            }
           } else {
-            return [key];
+            if (props.repeatKeys || !keyAlreadyChained) {
+              return [...prevKeys, key];
+            }
+            return prevKeys 
           }
-        } else {
-          return keyAlreadyChained ? prevKeys : [...prevKeys, key];
-        }
-      });
-    };
+        });
+      };
 
-    window.addEventListener("keydown", handleKeyPress);
+      window.addEventListener("keydown", handleKeyPress);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-      clearTimeout(timer);
-    };
-  }, [props.commandTriggerKeys]);
+      return () => {
+        window.removeEventListener("keydown", handleKeyPress);
+        clearTimeout(timer);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
 
   const variants: AnimationVariants = {
     hidden: { opacity: 0, y: 10 },
