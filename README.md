@@ -1,30 +1,85 @@
-# React + TypeScript + Vite
+# ↗️✨ Cmmnd
+Cmmnd is a dynamic Tailwind powered React component tailored for presenting keyboard shortcuts in the web.
+<br/><br/>
+![rec-tab-_3_-ezgif com-crop](https://github.com/JoseTomasSilvaZ/Cmmnd/assets/58149194/0d44b538-5376-467f-aa7b-012abbe04536)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Usage
 
-Currently, two official plugins are available:
+There are a few ways to include the cmmnd styles
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+#### Including the styles in your css file 
+```css
+// index.css
 
-## Expanding the ESLint configuration
+@import 'cmmnd/dist/style.css'
+```
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+#### Or including it in your tailwind.config.js file
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
+```javascript
+/** @type {import('tailwindcss').Config} */
 export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
+  content: [
+    //... ,
+    './node_modules/cmmnd/dist/**/*.{js,jsx,ts,tsx}'
+    
+  ],
+  theme: {
+    extend: {},
   },
+  plugins: [],
+}
+
+```
+
+Then, use it wherever you want
+
+```tsx
+import {Command} from 'cmmnd'
+
+function App() {
+  return (
+    <>
+    //...
+        <Command variant='light' triggerKeys={['Control', 'Shift']} />
+    //...
+    </>
+  )
 }
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Props
+
+Cmmnd provides some props to make the component flexible and adjustable to your needs.
+
+#### variant = 'light' | 'default'
+```tsx
+<Command variant='light'/>
+```
+#### triggerKeys = string[]
+Trigger cmmnd only when shortcuts starts with the keys provided in the array
+```tsx
+<Command triggerKeys={['Control', 'Shift']}/>
+```
+#### side = 'bottom' | 'bottomRight' | 'bottomLeft' | 'topRight' | 'topLeft'
+
+Decide where cmmnd is placed, bottom as default.
+```tsx
+<Command side='bottomRight'/>
+```
+
+#### repeatKeys = boolean
+Allow repeated keys to be shown in cmmnd. False as default.
+
+```tsx
+<Command repeatKeys/>
+```
+
+#### dissapearAfter = number --> in ms
+Decide how much time cmmnd in shown after is triggered. 2 seconds as default
+
+```tsx
+<Command dissapearAfter={4000}/>
+```
+
+
