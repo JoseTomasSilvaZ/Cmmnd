@@ -54,7 +54,7 @@ interface PressedKeyProps {
 
 interface Props extends VariantProps<typeof styleVariants> {
   triggerKeys?: Array<string>;
-  dissapearAfter?: number;
+  disappearAfter?: number;
   repeatKeys?: boolean;
 }
 
@@ -86,9 +86,9 @@ export default function Command(props: Props) {
   const [keysPressed, setKeysPressed] = useState<Array<string>>([]);
   const [showComponent, setShowComponent] = useState(false);
     useEffect(() => {
-      const dissapearAfter =
-        typeof props.dissapearAfter === "number" && props.dissapearAfter > 0
-          ? props.dissapearAfter
+      const disappearAfter =
+        typeof props.disappearAfter === "number" && props.disappearAfter > 0
+          ? props.disappearAfter
           : 2000;
       let timer: NodeJS.Timeout;
 
@@ -106,7 +106,7 @@ export default function Command(props: Props) {
           clearTimeout(timer);
           timer = setTimeout(() => {
             resetCommand(setShowComponent, setKeysPressed);
-          }, dissapearAfter);
+          }, disappearAfter);
           const keyAlreadyChained = prevKeys.includes(key);
 
           if (triggers.length > 0 && triggers.includes(key)) {
