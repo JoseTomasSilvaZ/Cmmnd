@@ -1,5 +1,5 @@
 # ↗️✨ Cmmnd
-Cmmnd is a dynamic Tailwind powered React component tailored for presenting keyboard shortcuts in the web.
+Cmmnd is a styled, customizable React component tailored for presenting keyboard shortcuts on the web.
 <br/><br/>
 ![rec-tab-_3_-ezgif com-crop](https://github.com/JoseTomasSilvaZ/Cmmnd/assets/58149194/0d44b538-5376-467f-aa7b-012abbe04536)
 
